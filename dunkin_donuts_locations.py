@@ -154,8 +154,9 @@ def get_dd_store_url_tails(town_name_list):
                 # strips beginning of url off (../../en)
                 store_url_result.append(store_address[8:])
         
-        
-        
+        print('completed', i, 'of', len(town_name_list))
+        i = i + 1
+
     return store_url_result
 
 dd_valid_stores = get_dd_store_url_tails(dd_valid_towns)
@@ -217,7 +218,12 @@ def get_dd_store_info(dd_store_url_list):
             for item in store_soup_obj.select('.Core-features'):
                 return [item.get_text().__contains__(feature) for feature in store_feature_list]
 
+        # calling above function to scrape and classify stores' features
         feature_data = get_feat_data(store_soup)
+
+        # some pages do not have a 'features' section, in which case all are assumed false
+        if feature_data == None:
+            feature_data = [False] * 6
 
         # merging individual store data to a single list entry and appending to result list
         ind_store_data.append(address_data + phone_data + hours_data + feature_data)
