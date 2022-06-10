@@ -3,8 +3,6 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-
-
 #-------------------------------------#
 # Phase One:                          #  
 # retrieving states that have at      #
@@ -90,8 +88,6 @@ dd_valid_states = [state.get_text() for state in base_location_soup.select('.Dir
 # converting from state names to abbreviations
 dd_valid_state_abrvs = [get_key(val, states).lower() for val in dd_valid_states]
 
-
-
 #-------------------------------------#
 # Phase two:                          #
 # iterating through each state to get #
@@ -120,8 +116,6 @@ def get_dd_town_names(state_abrv_list):
     return town_result
 
 dd_valid_towns = get_dd_town_names(dd_valid_state_abrvs)
-
-
 
 #-------------------------------------#
 # Phase three:                        #
@@ -164,8 +158,6 @@ dd_valid_stores = get_dd_store_url_tails(dd_valid_towns)
 #for store_url in dd_valid_stores:
 #    print(store_url)
 
-
-
 #-------------------------------------#
 # Phase four:                         #
 # scraping individual store info      #
@@ -196,18 +188,30 @@ def get_dd_store_info(dd_store_url_list):
         store_page = requests.get(base_url + store_url)
         store_soup = BeautifulSoup(store_page.content, 'html.parser')
 
-        # scraping store's address
-        address_data = [item.get_text() for item in\
-            store_soup.select("""
-                .c-address-postal-code , 
-                .c-address-city , 
-                .c-address-state , 
-                .c-address-street-2 , 
-                .c-address-street-1
-                """)]
+        # scraping store's address and phone number
+        def get_address_data(soup_obj):
 
-        # scraping store's phone number
-        phone_data = [store_soup.select('#phone-main')[0].get_text()]
+            # initialize storage for address data in function
+            address_result = []
+
+            # css tags containing store address and phone information
+            address_field_tags = ['.c-address-street-1', 
+                                '.c-address-street-2', 
+                                '.c-address-city', 
+                                '.c-address-state', 
+                                '.c-address-postal-code',
+                                '#phone-main']
+
+            # collecting fields, substituting N/A if field is not present on page
+            for field in address_field_tags:
+                if[item.get_text() for item in soup_obj.select(field)] != []:
+                    address_result.append( soup_obj.select(field)[0].get_text())
+                else:
+                    address_result.append("N/A")
+
+            return address_result
+
+        address_data = get_address_data(store_soup)
 
         # scraping store's operating hours
         hours_data = [item.get_text() for item in\
@@ -226,7 +230,7 @@ def get_dd_store_info(dd_store_url_list):
             feature_data = [False] * 6
 
         # merging individual store data to a single list entry and appending to result list
-        ind_store_data.append(address_data + phone_data + hours_data + feature_data)
+        ind_store_data.append(address_data + hours_data + feature_data)
 
         print('collected', i, 'of', len(dd_store_url_list))
         i = i + 1
