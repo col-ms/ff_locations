@@ -172,16 +172,6 @@ def get_dd_store_info(dd_store_url_list):
     # initialize storage for results
     ind_store_data = []
 
-    # list of possible store features, as listed on DD website
-    store_feature_list = [
-        'Drive Thru',
-        'On-the-Go Mobile Ordering',
-        "Accepts Dunkin' Cards",
-        'K-Cup Pods',
-        'Curbside Pick Up',
-        'Baskin-Robbins'
-    ]
-
     for store_url in dd_store_url_list:
 
         # get store's individual page
@@ -219,6 +209,17 @@ def get_dd_store_info(dd_store_url_list):
 
         # defining function to detect presence of features and return binary indicators
         def get_feat_data(store_soup_obj):
+
+            # list of possible store features, as listed on DD website
+            store_feature_list = [
+                'Drive Thru',
+                'On-the-Go Mobile Ordering',
+                "Accepts Dunkin' Cards",
+                'K-Cup Pods',
+                'Curbside Pick up',
+                'Baskin-Robbins'
+            ]
+
             for item in store_soup_obj.select('.Core-features'):
                 return [item.get_text().__contains__(feature) for feature in store_feature_list]
 
