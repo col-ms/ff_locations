@@ -148,8 +148,8 @@ def get_dd_store_url_tails(town_name_list):
                 # strips beginning of url off (../../en)
                 store_url_result.append(store_address[8:])
         
-        print('completed', i, 'of', len(town_name_list))
-        i = i + 1
+        print('completed', i, 'of', len(town_name_list), end = '\r')
+        i += 1
 
     return store_url_result
 
@@ -233,8 +233,8 @@ def get_dd_store_info(dd_store_url_list):
         # merging individual store data to a single list entry and appending to result list
         ind_store_data.append(address_data + hours_data + feature_data)
 
-        print('collected', i, 'of', len(dd_store_url_list))
-        i = i + 1
+        print('collected', i, 'of', len(dd_store_url_list), end = '\r')
+        i += 1
 
     return ind_store_data
 
