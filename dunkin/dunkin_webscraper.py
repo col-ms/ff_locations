@@ -267,6 +267,6 @@ df_field_names = [
 store_info_df = pd.DataFrame(store_data_list_complete, columns = df_field_names)
 
 # writes csv from pandas dataframe
-store_info_df.to_csv('dunkin_stores.csv')
+store_info_df.to_csv('dunkin/dunkin_stores.csv')
 
         
