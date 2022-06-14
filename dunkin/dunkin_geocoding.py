@@ -3,7 +3,7 @@ import pandas as pd
 from geopy.geocoders import Nominatim
 
 # reading in data
-df = pd.read_csv("dunkin/dd_store_loc_info.csv")
+df = pd.read_csv("dunkin/dunkin_stores.csv")
 
 # cleaning columns and prepping for string concat below
 df = df.rename(columns = {"Unnamed: 0": 'row_id'})
