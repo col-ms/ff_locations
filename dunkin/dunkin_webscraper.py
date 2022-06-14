@@ -155,8 +155,7 @@ def get_dd_store_url_tails(town_name_list):
 
 dd_valid_stores = get_dd_store_url_tails(dd_valid_towns)
 
-#for store_url in dd_valid_stores:
-#    print(store_url)
+print('-----------')
 
 #-------------------------------------#
 # Phase four:                         #
